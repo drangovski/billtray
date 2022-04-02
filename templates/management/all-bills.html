@@ -1,0 +1,142 @@
+{% extends 'management/base.html' %}
+{% load humanize %}
+
+
+{% block content %}
+<!-- Main content -->
+<div class="main-content-wrapper all-bills-wrapper">
+	<div>
+		<div class="mc-header">
+			<div>
+				<h1>{{ bill_type.name }}</h1>
+				<span>Details for {{ bill_type.name|lower }} billing</span>
+			</div>
+			<a class="top-main-action" href="{% url 'newBill' bill_type.id %}">Add new bill</a>
+		</div>
+		<div class="main-content">
+			<!-- All Bills overview tiles -->
+			<div class="ab-overview-tiles">
+				<div>
+					<div class="ab-overview-tile">
+						<span>Amount paid</span>
+						<p>{{ total_paid }} MKD</p>
+					</div>
+				</div>
+				<div>
+					<div class="ab-overview-tile">
+						<span>Due amount remaining</span>
+						<p>{{ total_due }} MKD</p>
+					</div>
+				</div>
+				<div>
+					<div {% if total_overdue %}class="ab-overview-tile overdue"{% else %}class="ab-overview-tile no-overdue"{% endif %}>
+						<span>Amount overdue</span>
+						<p>{{ total_overdue }} MKD</p>
+					</div>
+				</div>
+				
+			</div>
+			<!-- All Bills - All payments -->
+			<div class="ab-allpayments-cont">
+				<!-- All overdue bills -->
+				<div class="ab-overdue-cont">
+					<span>OVERDUE BILLS</span>
+					{% for bill in bill_type.get_all_overdue  %}  
+						{% if bill.paid != True %}
+					<div>
+						
+						<div class="bo-widget-bill-cont overdue">
+							<span class="bo-overdue-warning"><i class="fas fa-exclamation-triangle"></i></span>
+							<div class="bo-bill-info">
+								<span>{{ bill.month|date:'F Y' }}</span>
+								<div>
+									<span>{{ bill.amount|intcomma }} {{ bill.currency }}</span>
+									<p>Due Date: {{ bill.due_date }}</p>
+								</div>
+							</div>
+							<div class="bo-bill-actions">
+								<a class="bo-bill-paid-action" href="{% url 'payBill' bill_id=bill.id %}"><i class="fas fa-check"></i></a>
+							</div>
+						</div>
+						<div class="ab-list-actions">
+							<a class="ab-edit-type" href="{% url 'updateBill' bill.id %}"><i class="fas fa-pencil-alt"></i></i></a>
+							<a class="abtdelete-type" href="{% url 'deleteBill' bill.id %}"><i class="far fa-trash-alt"></i></a>
+						</div>
+					</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+				<!-- All current bills -->
+				<div class="ab-current-cont">
+					<span>DUE BILLS</span>
+					{% for bill in bill_type.get_all_active  %}
+						{% if bill.paid != True %}
+					<div>
+						<div class="bo-widget-bill-cont">
+							<div class="bo-bill-info">
+								<span>{{ bill.month|date:'F Y' }}</span>
+								<div>
+									<span>{{ bill.amount|intcomma }} {{ bill.currency }}</span>
+									<p>Due Date: {{ bill.due_date }}</p>
+								</div>
+							</div>
+							<div class="bo-bill-actions">
+								<a class="bo-bill-paid-action" href="{% url 'payBill' bill_id=bill.id %}"><i class="fas fa-check"></i></a>
+							</div>
+						</div>
+						<div class="ab-list-actions">
+							<a class="ab-edit-type" href="{% url 'updateBill' bill.id %}"><i class="fas fa-pencil-alt"></i></i></a>
+							<a class="abtdelete-type" href="{% url 'deleteBill' bill.id %}"><i class="far fa-trash-alt"></i></a>
+						</div>
+					</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+				<!-- All previous -->
+				<div class="ab-previous-cont">
+					<span>PAID BILLS</span>
+					{% for bill in bill_type.bills.all %}
+						{% if bill.paid == True %}
+					<div>
+						<div class="bo-widget-bill-cont paid">
+							<div class="bo-bill-info">
+								<span>{{ bill.month|date:'F Y' }}</span>
+								<div>
+									<span>{{ bill.amount|intcomma }} {{ bill.currency }}</span>
+									<p>Due Date: {{ bill.due_date }} <span>&ensp;&#9679;&ensp;</span> Paid on: {{ bill.paid_on }}</p>
+								</div>
+							</div>
+							<div class="bo-bill-actions">
+								<a class="bo-bill-paid-action" href="{% url 'undoBill' bill_id=bill.id %}"><i class="fas fa-undo-alt"></i></a>
+							</div>
+						</div>
+						<div class="ab-list-actions">
+							<a class="ab-edit-type" href="{% url 'updateBill' bill.id %}"><i class="fas fa-pencil-alt"></i></i></a>
+							<a class="abtdelete-type" href="{% url 'deleteBill' bill.id %}"><i class="far fa-trash-alt"></i></a>
+						</div>
+					</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+			<!-- Notes Sidebar -->
+			<div class="notes-sidebar">
+				<span>Notes</span>
+				<div>
+					{% for bill in bill_type.bills.all %}
+						{% if bill.note != '' %}
+						<div class="ns-note">
+							<div class="ns-note-actions">
+								<a href="{% url 'removeNote' bill_id=bill.id %}"><i class="fas fa-times"></i></a>
+							</div>
+							<span>{{ bill.month|date:'M Y' }}</span>
+							<p>{{ bill.note }}</p>
+						</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

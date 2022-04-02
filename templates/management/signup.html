@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE HTML>
+<!--[if IE 9 ]>    <html lang="en" id="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="UTF-8" />
+	<title>Billtray</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+	<link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
+
+	<link rel="stylesheet" type="text/css" href="{% static 'css/billtray.css' %}">
+</head>
+<body>
+	<!-- Main wrapper -->
+	<div class="wrapper">
+		<div>
+			<div class="access-container">
+				<span class="logo">Billtray</span>
+				<div class="access-form-cont">
+					<div class="access-form-wrapper">
+						<h1>Sign Up</h1>
+						<span>Please complete the form to create an account</span>
+						<form class="access-form" action="{% url 'signup' %}" method="post">
+							{% csrf_token %}
+							<div class="af-form-group">
+								<span>EMAIL ADDRESS</span>
+								{{ form.email }}
+							</div>
+							<div class="af-form-group">
+								<span>PASSWORD</span>
+								{{ form.password1 }}
+							</div>
+							<div class="af-form-group">
+								<span>RE-ENTER THE PASSWORD</span>
+								{{ form.password2 }}
+							</div>
+							<div class="af-form-group af-last-group af-signup-tc-group">
+								<div>
+									<span>By signing up, you agree with our <a href="javascript:;">Terms & Conditions.</a></span>
+								</div>
+								<button type="submit">Sign up</button>
+							</div>
+						</form>
+					</div>
+					<div class="access-form-switcher">
+						<span>Have an account? Click here and <a href="/billtray/login.html">sign in</a> to your account.</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</body>
+</html>

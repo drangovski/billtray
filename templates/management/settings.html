@@ -1,0 +1,180 @@
+{% extends 'management/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<!-- Billing Types -->
+<div class="main-content-wrapper">
+	<div>
+		<div class="mc-header">
+			<div>
+				<h1>Settings</h1>
+				<span>Change your account settings bellow</span>
+			</div>
+		</div>
+		<div class="main-content">
+			<div class="settings-header">
+				<div class="sh-user-cont">
+					<div class="sh-uc-userimage">
+						<form class="settings-image-form" method="POST" action="{% url 'settings' %}" enctype="multipart/form-data">
+							{% csrf_token %}
+							{{ newForm.image }}
+							<button type="submit" class="update" id="settingsImage" name="settingsImage">Update</button>
+						</form>
+						{% if user.userprofile.image.url != None %}
+						<img src="{{ user.userprofile.image.url }}" alt="">
+						{% else %}
+						<img src="{% static 'img/profile-default-image.png' %}">
+						{% endif %}
+					</div>
+					<span>{{ request.user.first_name }}</span>
+					<span>{{ request.user.last_name }}</span>
+				</div>
+			</div>
+
+			<!-- Personal Tab -->
+			<div class="settings-tabs">
+				<input class="tab-checkbox personal" type="radio" name="tabs" checked="checked" id="personal">
+				<label for="personal">Personal</label>
+				<div class="tab">
+					<div class="tab-lside">
+						<div class="settings-form">
+							<form action="{% url 'settings' %}" method="POST">
+								{% csrf_token %}
+								<div class="settings-form-group">
+									<span>FIRST NAME</span>
+									{{ form.first_name }}
+								</div>
+								<div class="settings-form-group">
+									<span>LAST NAME</span>
+									{{ form.last_name }}
+								</div>
+								<div class="settings-form-group settings-last-group">
+									<button type="submit" class="update" name="settingsPersonal">Update</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+
+				<!-- Security Tab -->
+				<input class="tab-checkbox security" type="radio" name="tabs" id="security">
+				<label for="security">Security</label>
+				<div class="tab">
+					<div class="tab-lside">
+						<div class="settings-form">
+							<form method="POST" action="{% url 'settings' %}" class="password_change">
+								{% csrf_token %}
+								<div class="settings-form-group">
+									<span>EMAIL ADDRESS</span>
+									<input type="text" name="" value="{{ request.user.email }}" disabled>
+								</div>
+								<div class="settings-form-group">
+									<span>OLD PASSWORD</span>
+									{{ changePassForm.oldpassword }}
+								</div>
+								<div class="settings-form-group">
+									<span>NEW PASSWORD</span>
+									{{ changePassForm.password1 }}
+								</div>
+								<div class="settings-form-group">
+									<span>RE-TYPE NEW PASSWORD</span>
+									{{ changePassForm.password2 }}
+								</div>
+								<div class="settings-form-group settings-last-group">
+									<button type="submit" class="update" name="settingsSecurity">Update</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="tab-rside">
+						<div class="settings-account-delete">
+							<span>Account Deletion</span>
+							<p>Permanently delete your account and related account data?</p>
+							<a class="delete-account" href="{% url 'deleteAccount' %}">Delete Account</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Localization Tab -->
+				<input class="tab-checkbox localization" type="radio" name="tabs" id="localization">
+				<label for="localization">Localization</label>
+				<div class="tab">
+					<div class="tab-lside">
+						<div class="settings-form">
+							<form method="POST" action="{% url 'settings' %}">
+								{% csrf_token %}
+								<div class="settings-form-group">
+									<span>CURRENCY</span>
+									{{ localizationForm.currency }}
+								</div>
+								<div class="settings-form-group">
+									<span>LANGUAGE</span>
+									{{ localizationForm.language }}
+								</div>
+								<div class="settings-form-group settings-last-group">
+									<button type="submit" class="update" name="settingsLocalization">Update</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<!-- Notificaitions Tab -->
+				<input class="tab-checkbox notifications" type="radio" name="tabs" id="notificatons">
+				<label for="notificatons">Email Notifications & Reports</label>
+				<div class="tab">
+					<div class="tab-lside">
+						<div class="settings-form">
+							<form method="POST" action="{% url 'settings' %}">
+								{% csrf_token %}
+								<div class="settings-form-group settings-checkbox-group">
+									<div class="scg-inner">
+										<span class="settings-checkbox-label">Receive email notifications for overdue bills.</span>
+										<label class="settings-checkbox">
+											{{ reportsForm.report_overdue }}
+										 	<span class="checkmark"></span>
+										</label>
+									</div>
+								</div>
+								<div class="settings-form-group settings-checkbox-group">
+									<div class="scg-inner">
+										<span class="settings-checkbox-label">Receive email notifications for recurring due bills.</span>
+										<label class="settings-checkbox">
+											{{ reportsForm.report_recurring }}
+										 	<span class="checkmark"></span>
+										</label>
+									</div>
+								</div>
+								<div class="settings-form-group settings-checkbox-group">
+									<div class="scg-inner">
+										<span class="settings-checkbox-label">Receive email notifications for missing bills.</span>
+										<label class="settings-checkbox">
+											{{ reportsForm.report_missing }}
+										 	<span class="checkmark"></span>
+										</label>
+									</div>
+								</div>
+								<div class="settings-form-group settings-checkbox-group">
+									<div class="scg-inner">
+										<span class="settings-checkbox-label">Receive monthly reports on your email.</span>
+										<label class="settings-checkbox">
+											{{ reportsForm.report_monthly }}
+										 	<span class="checkmark"></span>
+										</label>
+									</div>
+								</div>
+								<div class="settings-form-group settings-last-group">
+									<button type="submit" class="update" name="settingsReport">Update</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

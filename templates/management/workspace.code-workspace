@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "billtray",
+			"path": "../.."
+		},
+		{
+			"name": "backerlist",
+			"path": "../../../backerlist"
+		}
+	],
+	"settings": {}
+}

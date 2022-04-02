@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE HTML>
+<!--[if IE 9 ]>    <html lang="en" id="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="UTF-8" />
+	<title>Billtray</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+	<link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
+
+	<link rel="stylesheet" type="text/css" href="{% static 'css/billtray.css' %}">
+</head>
+<body>
+	<!-- Main wrapper -->
+	<div class="wrapper">
+		<div>
+			<div class="access-container">
+				<span class="logo">Billtray</span>
+				<div class="access-form-cont">
+					<div class="access-form-wrapper">
+						<h1>Log in</h1>
+						<span>Please enter your account information to log in</span>
+						<div class="access-form">
+							<div class="af-form-group">
+								<span>EMAIL ADDRESS</span>
+								<input type="text" name="">
+							</div>
+							<div class="af-form-group">
+								<span>PASSWORD</span>
+								<input type="text" name="">
+							</div>
+							<div class="af-form-group af-last-group">
+								<div>
+									<span>Forgot your <a href="javascript:;">password?</a></span>
+								</div>
+								<button type="button">Log in</button>
+							</div>
+						</div>
+					</div>
+					<div class="access-form-switcher">
+						<span>Need an account? Click here and <a href="/billtray/signup.html">sign up</a> for one</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

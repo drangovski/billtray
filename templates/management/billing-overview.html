@@ -1,0 +1,88 @@
+{% extends 'management/base.html' %}
+{% load humanize %}
+
+{% block content %}
+<!-- Billing Overview -->
+<div class="main-content-wrapper">
+	<div>
+		<div class="mc-header">
+			<div>
+				<h1>Billing Overview</h1>
+				<span>Overall insight of your household billing types</span>
+			</div>
+			<a class="top-main-action" href="{% url 'billTypes' %}">Add new billing type</a>
+		</div>
+		<div class="main-content">
+			<!-- Billing ovewview content -->
+			<div class="billing-overview-content">
+				<!-- Billing overview columsn -->
+				<div class="billing-overview-columns">
+
+					{% for type in billtypes %} 
+					<!-- Billing overview column -->
+					<div>
+						<!-- Billing overview widget -->
+						<div class="bo-widget">
+							<div class="bo-widget-header">
+								<div>
+									<h2>{{ type.name }}</h2>
+									<span>Overview of {{ type.name|lower }} bills</span>
+								</div>
+								<a class="bo-addnew-bill" href="{% url 'newBill' type.id %}">+</a>
+							</div>
+							<div class="bo-widget-content">
+
+								<span>LATEST OVERDUE BILL</span>
+								{% if type.get_latest_overdue %}
+								<div class="bo-widget-bill-cont no-action overdue">
+									<span class="bo-overdue-warning"><i class="fas fa-exclamation-triangle"></i></span>
+									<div class="bo-bill-info">
+										<span>{{ type.get_latest_overdue.month|date:'F Y' }}</span>
+										<div>
+											<span>{{ type.get_latest_overdue.amount|intcomma }}</span>
+											<p>Due Date: {{ type.get_latest_overdue.due_date }}</p>
+										</div>
+									</div>
+								</div>
+								{% else %}
+								<div class="bo-widget-bill-cont no-overdue">
+									<div class="bo-bill-info">
+										<span>Great! No overdue bills.</span>
+									</div>
+								</div>
+								{% endif %}
+
+								<span>LATEST DUE BILL</span>
+								{% if type.get_latest_current %}
+								<div class="bo-widget-bill-cont no-action">
+									<div class="bo-bill-info">
+										<span>{{ type.get_latest_current.month|date:'F Y' }}</span>
+										<div>
+											<span>{{ type.get_latest_current.amount|intcomma }}</span>
+											<p>Due Date: {{ type.get_latest_current.due_date }}</p>
+										</div>
+									</div>
+								</div>
+								{% else %}
+								<div class="bo-widget-bill-cont">
+									<div class="bo-bill-info">
+										<span>There are no due bills.</span>
+									</div>
+								</div>
+								{% endif %}
+							</div> 
+							<div class="bo-see-all">
+								<a href="{% url 'allBills' type.id %}">Manage {{type.name|lower}} bills</a>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

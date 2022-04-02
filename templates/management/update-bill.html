@@ -1,0 +1,56 @@
+{% extends 'management/base.html' %}
+{% load humanize %}
+
+
+{% block content %}
+<!-- Add New Bill -->
+<div class="main-content-wrapper">
+	<div>
+		<div class="mc-header">
+			<div>
+				<h1>Update Bill</h1>
+				<span>Here you can update the details for the bill</span>
+			</div>
+		</div>
+		<div class="main-content">
+			<!-- Add new bill -->
+			<div class="new-bill-content">
+				<div>
+					<div class="new-bill-form">
+						<form action="{% url 'updateBill' bill_id %}" method="POST">
+							{% csrf_token %}
+							<div class="nb-form-group">
+									<span>FOR MONTH</span>
+									{{ form.month }}
+								</div>
+								<div class="nb-form-group">
+									<span>AMMOUNT</span>
+									{{ form.amount }}
+								</div>
+								<div class="nb-form-group">
+									<span>DUE DATE</span>
+									{{ form.due_date }}
+								</div>
+								<div class="nb-form-group">
+									<span>NOTE</span>
+									{{ form.note }}
+								</div>
+								<div class="nb-form-group nb-last-group">
+									<div>
+										<span class="nb-checkbox-label">IS THE BILL RECURRING?</span>
+										<label class="nb-checkbox">
+											{{ form.recurring }}
+										 	<span class="checkmark"></span>
+										</label>
+									</div>
+									<button type="submit" class="update">Update</button>
+								</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

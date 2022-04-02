@@ -1,0 +1,87 @@
+{% extends 'management/base.html' %}
+{% load i18n %}
+{% block content %}
+<!-- Main content -->
+<div class="main-content-wrapper">
+	<div>
+		<div class="mc-header">
+			<div>
+				<h1>{% trans "Dashboard" %}</h1>
+				<span>{% trans "Household overview for the current month" %}</span>
+			</div>
+		</div>
+		<div class="main-content">
+			<!-- Dashboard Content -->
+			<div class="dashboard-content">
+				<!-- Dashboard Columns -->
+				<div class="dashboard-columns">
+					<!-- Large Column -->
+					<div class="large-column">
+						<!-- Widget -->
+						<div class="dashboard-widget large">
+							<div class="widget-info">
+								<span>{% trans "Total amount paid" %}</span>
+								<p>{{ total_paid }} MKD</p>
+								<div class="progress-bar">
+									<div {% if percentage == 100 %}class="green"{% endif %} style="width:{{ percentage|floatformat:'0' }}%;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Medium Column -->
+					<div class="medium-column">
+						<!-- Widget -->
+						<div {% if total_due %}class="dashboard-widget small"{% else %}class="dashboard-widget small no-overdue"{% endif %}>
+							<div class="widget-info">
+								<span>{% trans "Total due amount remaining" %}</span>
+								<p>{{ total_due }} MKD</p>
+							</div>
+						</div>
+						<!-- Widget -->
+						<div {% if total_overdue %}class="dashboard-widget small overdue"{% else %}class="dashboard-widget small no-overdue"{% endif %} >
+							<div class="widget-info">
+								<span>{% trans "Amount overdue" %}</span>
+								<p>{{ total_overdue }} MKD</p>
+							</div>
+						</div>
+					</div>
+					<!-- Small Column -->
+					<div class="small-column">
+						<!-- Widget -->
+						<div {% if due_count %}class="dashboard-widget small"{% else %}class="dashboard-widget small no-overdue"{% endif %}>
+							<div class="widget-info">
+								<span>{% trans "Due bills" %}</span>
+								<p>{{ due_count }}</p>
+							</div>
+						</div>
+						<!-- Widget -->
+						<div {% if overdue_count %}class="dashboard-widget small overdue"{% else %}class="dashboard-widget small no-overdue"{% endif %}>
+							<div class="widget-info">
+								<span>{% trans "Overdue bills" %}</span>
+								<p>{{ overdue_count }}</p>
+							</div>
+						</div>
+					</div>
+					<!-- Small Column -->
+					<div class="small-column">
+						<!-- Widget -->
+						<div class="dashboard-widget small">
+							<div class="widget-info">
+								<span>{% trans "Paid bills" %}</span>
+								<p>{{ paid_count }}</p>
+							</div>
+						</div>
+						<!-- Widget -->
+						<div class="dashboard-widget small">
+							<div class="widget-info">
+								<span>{% trans "Missing bills" %}</span>
+								<p>1</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

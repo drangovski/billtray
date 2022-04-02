@@ -1,0 +1,180 @@
+{% extends 'management/base.html' %}
+{% load i18n %}
+{% block content %}
+<script type="text/javascript">
+$(document).ready(function(){
+	var ctx = document.getElementById('expenses').getContext('2d');
+	var myChart = new Chart(ctx, {
+	    type: 'doughnut',
+	    data: {
+	        labels: [{% for bt in billtypes %}'{{ bt.name }} Bills',{% endfor %}],
+	        datasets: [{
+	            data: [{% for bt in billtypes %} {{ bt.get_billtype_total }}, {% endfor %}],
+	            backgroundColor: [
+	                'rgba(255, 99, 132, 0.5)',
+	                'rgba(54, 162, 235, 0.5)',
+	                'rgba(255, 206, 86, 0.5)',
+	                'rgba(75, 192, 192, 0.5)',
+	                'rgba(153, 102, 255, 0.5)',
+	                'rgba(255, 159, 64, 0.5)'
+	            ],
+	            borderWidth: 1
+	        }]
+	    },
+	    options: {
+	    	legend: {
+	    		display: false,
+	    	},
+	    	// rotation: 1 * Math.PI,
+      //   	circumference: 1 * Math.PI
+	    }
+	});
+});
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var ctx = document.getElementById("expensesCompare");
+	var myChart = new Chart(ctx, {
+	type: 'bar',
+		data: {
+			labels: [{% for bt in billtypes %} '{{ bt.name }}', {% endfor %}],
+			datasets: [{
+				label: 'Previous Month',
+				data: [{% for bt in billtypes %} {{ bt.get_prevmonth_total }}, {% endfor %}],
+				order: 1
+			},
+			{
+				label: 'Current Month',
+				data: [{% for bt in billtypes %} {{ bt.get_billtype_total }}, {% endfor %}],
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.5)',
+	                'rgba(54, 162, 235, 0.5)',
+	                'rgba(255, 206, 86, 0.5)',
+	                'rgba(75, 192, 192, 0.5)',
+	                'rgba(153, 102, 255, 0.5)',
+	                'rgba(255, 159, 64, 0.5)'
+				],
+				type: 'bar',
+				order: 2
+			}
+		]
+	  },
+		// options: {
+		// 	scales: {
+		// 		yAxes: [{
+		// 			stacked: true,
+		// 			ticks: {
+		// 			  beginAtZero: true
+		// 			}
+		// 			}],
+		// 			xAxes: [{
+		// 			stacked: true,
+		// 			ticks: {
+		// 			  beginAtZero: true
+		// 			}
+		// 		}]
+		// 	}
+		// }
+	});
+});
+</script>
+<!-- Main content -->
+<div class="main-content-wrapper">
+	<div>
+		<div class="mc-header">
+			<div>
+				<h1>{% trans "Dashboard" %}</h1>
+				<span>{% trans "Household overview for the current month" %}</span>
+			</div>
+		</div>
+		<div class="main-content">
+			<!-- Dashboard Content -->
+			<div class="dashboard-content">
+				<!-- Dashboard Columns -->
+				<div class="dashboard-columns">
+					<!-- Large Column -->
+					<div class="large-column">
+						<!-- Widget -->
+						<div class="dashboard-widget large">
+							<div class="widget-info">
+								<span>{% trans "Total amount paid" %}</span>
+								<p>{{ total_paid }} MKD</p>
+								<div class="progress-bar">
+									<div {% if percentage == 100 %}class="green"{% endif %} style="width:{{ percentage|floatformat:'0' }}%;"></div>
+								</div>
+							</div>
+						</div>
+						<!-- Widget -->
+						<div {% if total_due %}class="dashboard-widget small"{% else %}class="dashboard-widget small no-overdue"{% endif %}>
+							<div class="widget-info">
+								<span>{% trans "Total due amount remaining" %}</span>
+								<p>{{ total_due }} MKD</p>
+							</div>
+						</div>
+						<!-- Widget -->
+						<div {% if total_overdue %}class="dashboard-widget small overdue"{% else %}class="dashboard-widget small no-overdue"{% endif %} >
+							<div class="widget-info">
+								<span>{% trans "Amount overdue" %}</span>
+								<p>{{ total_overdue }} MKD</p>
+							</div>
+						</div>
+						<!-- Widget -->
+						<div {% if due_count %}class="dashboard-widget small"{% else %}class="dashboard-widget small no-overdue"{% endif %}>
+							<div class="widget-info">
+								<span>{% trans "Due bills" %}</span>
+								<p>{{ due_count }}</p>
+							</div>
+						</div>
+						<!-- Widget -->
+						<div {% if overdue_count %}class="dashboard-widget small overdue"{% else %}class="dashboard-widget small no-overdue"{% endif %}>
+							<div class="widget-info">
+								<span>{% trans "Overdue bills" %}</span>
+								<p>{{ overdue_count }}</p>
+							</div>
+						</div>
+						<!-- Widget -->
+						<div class="dashboard-widget small">
+							<div class="widget-info">
+								<span>{% trans "Paid bills" %}</span>
+								<p>{{ paid_count }}</p>
+							</div>
+						</div>
+						<!-- Widget -->
+						<div class="dashboard-widget small">
+							<div class="widget-info">
+								<span>{% trans "Missing bills" %}</span>
+								<p>1</p>
+							</div>
+						</div>
+					</div>
+					<div class="large-column">
+						<canvas id="expenses" width="200" height="200"></canvas>
+						<canvas id="expensesCompare" width="200" height="200"></canvas>
+						<!-- Widget -->
+						<div class="bo-widget dasboard-bo-widget">
+							<div class="bo-widget-header">
+								<div>
+									<h2>Quick Access</h2>
+								</div>
+							</div>
+							<div class="bo-widget-content">
+								{% for bt in billtypes %}
+								<a href="{% url 'allBills' bt.id %}" class="bo-widget-bill-cont no-action bow-margin qa-link">
+									<div class="bo-bill-info qa-tile">
+										<span>{{ bt.name }} Bills</span>
+										<ul>
+											{% if bt.get_overdue_count %}<li><p class="qa-overdue-indicator">{{ bt.get_overdue_count }}</p></li>{% endif %}
+											{% if bt.get_due_count %}<li><p>{{ bt.get_due_count }}</p></li>{% endif %}
+										</ul>
+									</div>
+								</a>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

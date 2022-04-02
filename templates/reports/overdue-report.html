@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	Hey {{ user.first_name }}
+	You have {{ overdue_count }} overdue bills.
+
+	{% for ob in overdue_bills %}
+	<span>Total amount of {{ ob.amount }} for {{ ob.month|date:'M Y' }} with due date until {{ ob.due_date }}</span><br /><br />
+	{% endfor %}
+
+	In order to sort them out, please jump to Billtray.
+</body>
+</html>

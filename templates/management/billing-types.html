@@ -1,0 +1,68 @@
+{% extends 'management/base.html' %}
+
+
+{% block content %}
+<!-- Billing Types -->
+<div class="main-content-wrapper">
+	<div>
+		<div class="mc-header">
+			<div>
+				<h1>Add new billing type</h1>
+				<span>Here you can manage or add new billing types</span>
+			</div>
+		</div>
+		<div class="main-content">
+			<!-- Add billign type form -->
+			<div class="add-billing-type-content">
+				<div>
+					<form action="{% url 'billTypes' %}" method="POST">
+					<div class="abt-input-cont">
+						<span>BILLING TYPE NAME</span>
+						<div class="abt-input">
+							{% csrf_token %}
+							<input class="abt-input-type" type="text" name="billingTypeName">
+							<input class="abt-input-add" type="submit" name="createBillType" value="+">
+						</div>
+					</div>
+					</form>
+					<div class="abt-list">
+						{% if bill_types %}
+						<ul>
+							{% for bill_type in bill_types %}
+							<li>
+								<div class="abt-list-item">
+									<span>{{ bill_type.name }}</span>
+									{% csrf_token %}
+									
+								</div>
+								<div class="abt-list-actions">
+									<a class="abt-edit-type" id="{{ bill_type.id }}" href="javascript:;"><i class="fas fa-pencil-alt"></i></i></a>
+									<a class="abt-delete-type" href="{% url 'deleteBillType' bill_type.id %}"><i class="far fa-trash-alt"></i></a>
+								</div>
+								<div class="abt-list-update"  id="abt-list-update-{{ bill_type.id }}">
+									<form action="{% url 'billTypes' %}" method="POST">
+										<div class="abt-input">
+											{% csrf_token %}
+											<input class="abt-update-type" type="text" name="updatedBillingTypeName" placeholder="Insert a new name for {{ bill_type.name }}" >
+											<input type="hidden" name="billTypeId" value="{{ bill_type.id }}" />
+											<div class="abt-update-actions">
+												<button class="abt-input-update" type="submit" name="updateBillType"><i class="fas fa-check"></i></button>
+												<button id="{{ bill_type.id }}" class="abt-input-clear" type="reset" name=""><i class="fas fa-times"></i></button>
+											</div>
+										</div>
+									</form>
+
+								</div>
+							</li>
+							{% endfor %}
+						</ul>
+						{% else %}
+						<span>There are no existing bill types.</span>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
