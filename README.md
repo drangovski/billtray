@@ -1,4 +1,4 @@
-# Billtray - A household expenses management system
+# Billtray - Household expenses management system
 
 Billtray is my personal project for tracking my expenses as a tenant. I wanted to expand my Django skills and in the same time I was tired from using spreadsheets for my monthly expenses calculations, so that's why I came up with the idea of building Billtray. 
 
